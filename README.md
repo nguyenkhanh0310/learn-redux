@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# Redux:
+- Là 1 thư viện mã nguồn mở độc lập, là kiến trúc giúp quản lý state tập trung.
+- Redux là 1 PATTERN -> có nhiều ràng buộc và quy tắc mà chúng ta phải tuân theo
+### Vì sao phải sử dụng Redux?
+- Quản lý Global State
+	+ Các components tại mọi nơi trong ứng dụng có thể truy xuất và cập nhật
+	+ Giải quyết vấn đề của react khi muốn truyền dữ liệu vào các cấp con cháu
+	+ 
+- Dễ dàng Debug
+- Xử lý caching dữ liệu từ Server
+### Vì sao phải sử dụng Redux Toolkit:
+- Sinh ra để giải quyết các vấn đề đối với Redux Core
+- Việc cấu hình (config) Redux phức tạp:
+	+ Phải cài đặt thủ công nhiều packages để Redux có thể hoạt động hiệu quả
+	+ Redux yêu cầu rất nhiều boilerplate code
+### Khi nào nên sử dụng Redux?
+- Dự án có số lượng lớn state và các state được sử dụng ở nhiều nơi
+- State được cập nhật thường xuyên
+- Logic code cập nhật state phức tạp
+- Ứng dụng có số lượng code trung bình hoặc lớn và có nhiều người làm chung
+- Cần debug và muốn xem cách state được cập nhật tại bất kỳ khoảng thời gian nào
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Không phải lúc nào cũng nên sử dụng Redux.
+Kiến trúc của Redux và các khái niệm cần nắm
+- State Management: Quản lý dữ liệu, quản lý trạng thái của ứng dụng. Redux có 1 kho lưu trữ các trạng thái trong ứng dụng
+- Immutability (bất biến): không thay đổi giá trị của object hay array -> copy và thay đổi giá trị của arr hay obj copy đó
 
-## Available Scripts
+### Kiến trúc Redux:
+#### Reducers:
+	- Là 1 function cơ bản:
+  ```
+  const initialValue = { value: 0}
+  const rootReducer = (state = initialValue, action) => {
+    switch(action.type) {
+      case 'INCREMENT':
+        return {
+          ...state,
+          value: state.value + 1
+        }
+        default:
+          return state;
+    }
+  }
+  ```
+  - **Ràng buộc** phải tuân theo:
+    + Giá trị state mới luôn luôn được tính toán dựa trên giá trị của state trước đó
+    + Không được trực tiếp thay đổi giá trị của state hiện tại, mà phải tạo 1 bản copy (spread syntax) và cập nhật lại giá trị mình mong muốn
+    + Không được có đoạn code bất đồng bộ nào (request tới server, math.random, date.now) trong reducer
+    -> Các function tuân thủ được những điều trên được gọi là *** PURE FUNCTION ***
+      * Chúng ta có thể dự đoán được kết quả trả về của state
+      * Tránh gặp bug ở giao diện
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### Action:
+  ```
+  const INCREMENT = {
+    type: 'todoList/increment', -> đoạn text mô tả xem hành động này là gì
+    payload: 0, (optional) -> dùng khi muốn tính toán gì đó với state 
+  }
+  ```
+  - Action creators (là 1 function để tạo ra 1 action)
+  ```
+  const incrementCreator = ( data ) => {
+    return {
+      type: 'todoList/increment',
+      payload: data
+    }
+  }
+  ```
+  -> Action creator giúp không phải viết các đoạn code lặp đi lặp lại
+#### Dispatch:
+  - Là 1 function
+  ```
+  dispatch(INCREMENT)
+  hoặc
+  dispatch(incrementCreator(15))
+  ```
+  - Dispatch nhận vào 1 action
