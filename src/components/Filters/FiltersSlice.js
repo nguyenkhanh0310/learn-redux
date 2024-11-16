@@ -50,3 +50,27 @@ export default createSlice({
     }
   }
 })
+
+/**  => Tạo ra reducer
+
+action creator => (payload) => {
+  type: 'filters/searchFilterChange' (name và tên của reducer được định nghĩa trong createSlice)
+  payload: payload
+}
+
+=> {
+reducer,
+actions
+}
+action => object 
+{
+   type: 'abc',
+   payload: value
+}
+   action creators => function: () => {
+    return {
+      type: 'abc',
+      payload: value
+    }
+  }
+*/
