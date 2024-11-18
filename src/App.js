@@ -4,47 +4,21 @@ import TodoList from './components/TodoList';
 import Filters from './components/Filters';
 import { setupServer } from './fakeApis';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchTodos } from './components/TodoList/todosSlice';
 
-setupServer();
+if( process.env.NODE_ENV === 'development') {
+  setupServer();
+}
 
 const { Title } = Typography;
 
 function App() {
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch('/api/todos', {
-      method: 'POST',
-      body: JSON.stringify(
-        {
-          id: 1,
-          name: 'Learn yoga',
-          completed: false,
-          priority: 'Medium' 
-        }
-      )
-    }).then((res) => {
-        fetch('/api/todos')
-          .then(res => res.json())
-          .then(res => console.log(res));
-
-        fetch('/api/updateTodo', {
-          method: 'POST',
-          body: JSON.stringify(
-            {
-              id: 1,
-              name: 'Learn Javascript',
-              completed: true,
-              priority: 'Medium'
-            }
-          ),
-        }).then(() => {
-          fetch('/api/todos')
-            .then(res => res.json())
-            .then(res => console.log(res));
-        });
-      })
-
-  }, []);
+    dispatch(fetchTodos());
+  }, [])
 
   return (
     <div
